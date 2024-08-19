@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página con Tarjetas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="./css/falsap.css">
+</head>
+
+<body>
+
+    <div class="container my-5">
+        <div class="card main-card p-3">
+            <div class="row d-flex justify-content-between">
+                <div class="col-md-6 d-flex">
+                    <!-- Tarjeta izquierda con entradas y resultados -->
+                    <div class="card flex-fill p-3">
+                        <form id="calculatorForm">
+                            <h1>Algoritmo de Falsa Posición</h1>
+                            <label for="functionInput">Función (en términos de x):</label>
+                            <input type="text" id="functionInput" class="form-control mb-2"
+                                placeholder="e.g. x^3 - x - 2" required>
+
+                            <label for="aInput">Extremo inferior (a):</label>
+                            <input type="text" id="aInput" class="form-control mb-2" required>
+
+                            <label for="bInput">Extremo superior (b):</label>
+                            <input type="text" id="bInput" class="form-control mb-2" required>
+
+                            <label for="tolInput">Tolerancia:</label>
+                            <input type="text" id="tolInput" class="form-control mb-2" value="0.0001" required>
+
+                            <label for="maxIterInput">Máximo de iteraciones:</label>
+                            <input type="text" id="maxIterInput" class="form-control mb-2" value="100" required>
+                        </form>
+
+                        <h2>Lista de Iteraciones</h2>
+                        <!-- Agregado un contenedor para que la tabla sea desplazable -->
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                            <table class="table table-dark text-white table-bordered iterations-table">
+                                <thead>
+                                    <tr>
+                                        <th>Iteración</th>
+                                        <th>a</th>
+                                        <th>b</th>
+                                        <th>m</th>
+                                        <th>f(a)</th>
+                                        <th>f(b)</th>
+                                        <th>f(m)</th>
+                                        <th>Error</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="iterationsTableBody"></tbody>
+                            </table>
+                        </div>
+
+                        <h2>Raíz Encontrada</h2>
+                        <p id="rootResult" class="font-weight-bold"></p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 d-flex">
+                    <!-- Tarjeta derecha con instrucciones y controles -->
+                    <div class="card flex-fill p-3">
+                        <img src="./img/falsa-posicion.jpg" class="card-img-top" alt="Imagen">
+                        <div class="card-body">
+                            <p class="card-text">
+                                El método de falsa posición es un algoritmo numérico utilizado para encontrar la raíz de una función continua 
+                                <i>f(x)</i> en un intervalo 
+                                <i>[a, b]</i> donde la función cambia de signo, es decir, 
+                                <i>f(a) × f(b) < 0</i>. Este método es una variación del método de bisección, pero en lugar de dividir el intervalo en mitades, utiliza una recta secante para aproximar la raíz.
+                            </p>
+                            
+                            <p><strong>Ejemplo Rápido</strong><br>
+                            Función a resolver: <i>f(x) = x<sup>3</sup> - x - 2</i><br>
+                            Paso 1: Selecciona un intervalo inicial 
+                            <i>[a, b]</i> tal que 
+                            <i>f(a) × f(b) < 0</i>. En este caso, elegimos 
+                            <i>a = 1</i> y 
+                            <i>b = 2</i>.
+                            </p>    
+                            
+                            <a href="https://www.uv.es/diaz/mn/node23.html"
+                                class="btn btn-info text-white w-100 mb-2">
+                                <i class="bi bi-file-earmark-ppt-fill"> Página Similar</i>
+                            </a>
+                            
+                            <!-- Botones de acción -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body">
+                                            <button class="btn btn-success w-100 mb-2" onclick="falsePosition()">
+                                                <i class="bi bi-calculator"></i> Calcular
+                                            </button>
+                                            <p>Este botón calculará las iteraciones</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body">
+                                            <button class="btn btn-warning w-100 mb-2 text-white" onclick="resetCalculator()">
+                                                <i class="bi bi-brush-fill"></i> Limpiar
+                                            </button>
+                                            <p>Este botón limpiará los campos para realizar un nuevo cálculo</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100">
+                                        <button class="btn btn-dark w-100 mb-2" onclick="window.location.href='index.html'">
+                                            <i class="bi bi-skip-backward-fill"></i> Regresar
+                                        </button>
+                                        <div class="card-body">
+                                            <p>Este botón te llevará de regreso al menú principal</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100">
+                                        <button class="btn btn-dark w-100 mb-2" onclick="window.location.href='Newthon.html'">
+                                            Continuar <i class="bi bi-skip-forward-fill"></i>
+                                        </button>
+                                        <div class="card-body">
+                                            <p>Este botón te llevará hacia el método de Newthon</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Botones de acción -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.5.0/math.min.js"></script>
+
+    <script>
+        function falsePosition() {
+            const funcStr = document.getElementById('functionInput').value;
+            const aInput = document.getElementById('aInput').value;
+            const bInput = document.getElementById('bInput').value;
+            const tolInput = document.getElementById('tolInput').value;
+            const maxIterInput = document.getElementById('maxIterInput').value;
+
+            if (!funcStr || !aInput || !bInput || !tolInput || !maxIterInput) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos Vacíos',
+                    text: 'Por favor, completa todos los campos antes de calcular la raíz.',
+                });
+                return;
+            }
+
+            const func = math.compile(funcStr);
+            let a = parseFloat(aInput);
+            let b = parseFloat(bInput);
+            const tol = parseFloat(tolInput);
+            const maxIter = parseInt(maxIterInput);
+
+            let iterations = [];
+            let fa, fb, fm, error;
+            let iteration = 0;
+
+            try {
+                fa = func.evaluate({ x: a });
+                fb = func.evaluate({ x: b });
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error en la Función',
+                    text: 'Asegúrate de que la función esté bien escrita y sea válida.',
+                });
+                return;
+            }
+
+            if (fa * fb > 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Intervalo Incorrecto',
+                    text: 'El intervalo no contiene una raíz. Asegúrate de que la función cambie de signo entre a y b.',
+                });
+                return;
+            }
+
+            while (iteration < maxIter) {
+                fm = (a * fb - b * fa) / (fb - fa);
+                let sign = fa * func.evaluate({ x: fm });
+
+                iterations.push({
+                    iteration: iteration,
+                    a: a.toFixed(5),
+                    b: b.toFixed(5),
+                    m: fm.toFixed(5),
+                    fa: fa.toFixed(5),
+                    fb: fb.toFixed(5),
+                    fm: func.evaluate({ x: fm }).toFixed(5),
+                    error: Math.abs(b - a).toFixed(5)
+                });
+
+                if (Math.abs(func.evaluate({ x: fm })) < tol) {
+                    break;
+                }
+
+                if (sign > 0) {
+                    a = fm;
+                    fa = func.evaluate({ x: a });
+                } else {
+                    b = fm;
+                    fb = func.evaluate({ x: b });
+                }
+
+                iteration++;
+            }
+
+            displayIterations(iterations);
+            displayRoot(fm);
+        }
+
+        function displayIterations(iterations) {
+            const tableBody = document.getElementById('iterationsTableBody');
+            tableBody.innerHTML = '';
+            iterations.forEach(iter => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${iter.iteration}</td>
+                    <td>${iter.a}</td>
+                    <td>${iter.b}</td>
+                    <td>${iter.m}</td>
+                    <td>${iter.fa}</td>
+                    <td>${iter.fb}</td>
+                    <td>${iter.fm}</td>
+                    <td>${iter.error}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function displayRoot(root) {
+            document.getElementById('rootResult').innerText = `La raíz encontrada es aproximadamente: ${root.toFixed(5)}`;
+        }
+
+        function resetCalculator() {
+            document.getElementById('calculatorForm').reset();
+            document.getElementById('iterationsTableBody').innerHTML = '';
+            document.getElementById('rootResult').innerText = '';
+        }
+    </script>
+</body>
+
+</html>

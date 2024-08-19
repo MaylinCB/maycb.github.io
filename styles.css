@@ -1,0 +1,64 @@
+/* Estilo general */
+body {
+    font-family: Cambria, "Times New Roman", Times, serif;
+}/* Custom Styles */
+/* Estilo general */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Contenedor principal para ocupar el espacio disponible */
+.main-content {
+    flex: 1;
+}
+
+/* Sección hero */
+.hero-section {
+    background-image: url('./img/hero2.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+}
+
+/* Estilo del pie de página */
+.footer {
+    background-color: #003CC5;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    margin-top: auto; /* Esto empuja el footer hacia el fondo */
+}
+
+.footer p {
+    margin: 0;
+}
+
+/* Estilo de los enlaces de navegación */
+.nav-link.active {
+    font-weight: bold;
+    color: #003CC5 !important;
+}
+
+.nav-link {
+    color: #555;
+    transition: color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+    color: #003CC5;
+    text-decoration: underline;
+    color: blue;
+  
+}
+
+/* CSS para un tamaño moderado del logo */
+.navbar-brand img {
+    height: 100px;
+    width: auto;
+}

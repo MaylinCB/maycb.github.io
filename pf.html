@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página con Tarjetas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="./css/puntof.css">
+    <style>
+        .highlight {
+            background-color: #d4edda;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container my-5">
+        <div class="card main-card p-3">
+            <div class="row d-flex justify-content-between">
+                <div class="col-md-6 d-flex">
+                    <!-- Tarjeta izquierda con entradas y resultados -->
+                    <div class="card flex-fill p-3">
+                        <h1>Algoritmo de Punto Fijo</h1>
+                        <label for="funcionEntrada">Función g(x) (en términos de x):</label>
+                        <input type="text" id="funcionEntrada" placeholder="e.g. (x^3 - 2) / 3"><br>
+
+                        <label for="aproximacionInicialEntrada">Aproximación inicial (p0):</label>
+                        <input type="text" id="aproximacionInicialEntrada"><br>
+
+                        <label for="toleranciaEntrada">Tolerancia:</label>
+                        <input type="text" id="toleranciaEntrada" value="0.0001"><br>
+
+                        <label for="maxIteracionesEntrada">Máximo de iteraciones:</label>
+                        <input type="text" id="maxIteracionesEntrada" value="100"><br>
+
+                        <h2>Lista de Iteraciones</h2>
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                            <table id="resultsTable" class="table table-dark text-white table-bordered iterations-table">
+                                <thead>
+                                    <tr>
+                                        <th>Iteración</th>
+                                        <th>p0</th>
+                                        <th>p1</th>
+                                        <th>Error</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaIteracionesCuerpo"></tbody>
+                            </table>
+                        </div>
+
+                        <h2>Punto Encontrado</h2>
+                        <p id="resultadoRaiz"></p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 d-flex">
+                    <!-- Tarjeta derecha con instrucciones y controles -->
+                    <div class="card flex-fill p-3">
+                        <img src="./img/puntofijo.png" class="card-img-top" alt="Imagen">
+                        <div class="card-body">
+                            <p class="card-text">
+                                El método del punto fijo es un método iterativo utilizado para encontrar una solución aproximada a una ecuación de la forma
+                                𝑥 = 𝑔(𝑥). La idea es reformular la ecuación original 𝑓(𝑥) = 0 en una forma equivalente 𝑥 = 𝑔(𝑥) y luego iterar a partir de un valor inicial 𝑥0, calculando sucesivamente 𝑥𝑛+1 = 𝑔(𝑥𝑛) hasta que la secuencia converja a un punto fijo 𝑥∗, donde 𝑔(𝑥∗) = 𝑥∗.
+                            </p>
+
+                            <p><strong>Ejemplo Rápido</strong><br>
+                                Función a resolver: x² − 2x + 1 = 0 y x₀ = 2
+                            </p>
+
+                            <a href="https://www.uv.es/diaz/mn/node23.html" class="btn btn-info text-white w-100 mb-2">
+                                <i class="bi bi-file-earmark-ppt-fill"></i> Página Similar
+                            </a>
+
+                            <!-- Botones de acción -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body">
+                                            <button class="btn btn-success w-100 mb-2" onclick="calcularPuntoFijo()">
+                                                <i class="bi bi-calculator"></i> Calcular
+                                            </button>
+                                            <p>Este botón calculará las iteraciones</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body">
+                                            <button class="btn btn-warning w-100 mb-2 text-white" onclick="limpiarCampos()">
+                                                <i class="bi bi-brush-fill"></i> Limpiar
+                                            </button>
+                                            <p>Este botón limpiará los campos para realizar un nuevo cálculo</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100">
+                                        <button class="btn btn-dark w-100 mb-2" onclick="window.location.href='index.html'">
+                                            <i class="bi bi-skip-backward-fill"></i> Regresar
+                                        </button>
+                                        <div class="card-body">
+                                            <p>Este botón te llevará de regreso al menú principal</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card text-center h-100">
+                                        <button class="btn btn-dark w-100 mb-2" onclick="window.location.href='FalsaPosicion.html'">
+                                            Continuar <i class="bi bi-skip-forward-fill"></i>
+                                        </button>
+                                        <div class="card-body">
+                                            <p>Este botón te llevará hacia el método de Falsa Posición</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Botones de acción -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.5.0/math.min.js"></script>
+
+    <script>
+        function calcularPuntoFijo() {
+            // Obtener la función y los parámetros del usuario
+            const funcionCadena = document.getElementById('funcionEntrada').value.trim();
+            if (!funcionCadena) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La función no puede estar vacía.'
+                });
+                return;
+            }
+
+            // Intentar compilar la función
+            let funcion;
+            try {
+                funcion = math.compile(funcionCadena);
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'La función no es válida.'
+                });
+                return;
+            }
+
+            let p0 = parseFloat(document.getElementById('aproximacionInicialEntrada').value);
+            const tolerancia = parseFloat(document.getElementById('toleranciaEntrada').value);
+            const maxIteraciones = parseInt(document.getElementById('maxIteracionesEntrada').value);
+
+            // Validar entradas
+            if (isNaN(p0) || isNaN(tolerancia) || isNaN(maxIteraciones)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor, asegúrate de que todos los campos están llenos correctamente.'
+                });
+                return;
+            }
+
+            let iteraciones = [];
+            let p1, error;
+            let iteracion = 0;
+
+            // Iterar hasta el máximo de iteraciones o hasta que el error sea menor que la tolerancia
+            for (let i = 0; i < maxIteraciones; i++) {
+                try {
+                    p1 = funcion.evaluate({x: p0}); // Calcular el nuevo punto
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al evaluar la función.'
+                    });
+                    return;
+                }
+                error = Math.abs(p1 - p0); // Calcular el error
+
+                // Guardar los resultados de la iteración
+                iteraciones.push({
+                    iteracion: iteracion + 1,
+                    p0: p0.toFixed(5),
+                    p1: p1.toFixed(5),
+                    error: error.toFixed(5)
+                });
+
+                // Verificar si el error es menor que la tolerancia
+                if (error < tolerancia) {
+                    break;
+                }
+
+                p0 = p1; // Actualizar el punto inicial
+                iteracion++;
+            }
+
+            mostrarIteraciones(iteraciones); // Mostrar las iteraciones en la tabla
+            mostrarRaiz(p1); // Mostrar la raíz encontrada
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Cálculo completado',
+                text: 'Las iteraciones se han calculado exitosamente.'
+            });
+        }
+
+        function mostrarIteraciones(iteraciones) {
+            const cuerpoTabla = document.getElementById('tablaIteracionesCuerpo');
+            cuerpoTabla.innerHTML = '';
+            iteraciones.forEach(iter => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${iter.iteracion}</td>
+                    <td>${iter.p0}</td>
+                    <td>${iter.p1}</td>
+                    <td>${iter.error}</td>
+                `;
+                if (iter.error < 0.0001) {
+                    fila.classList.add('highlight');
+                }
+                cuerpoTabla.appendChild(fila);
+            });
+        }
+
+        function mostrarRaiz(raiz) {
+            document.getElementById('resultadoRaiz').innerText = `El punto encontrado es aproximadamente: ${raiz.toFixed(5)}`;
+        }
+
+        function limpiarCampos() {
+            document.getElementById('funcionEntrada').value = '';
+            document.getElementById('aproximacionInicialEntrada').value = '';
+            document.getElementById('toleranciaEntrada').value = '0.0001';
+            document.getElementById('maxIteracionesEntrada').value = '100';
+            document.getElementById('tablaIteracionesCuerpo').innerHTML = '';
+            document.getElementById('resultadoRaiz').innerText = '';
+        }
+    </script>
+</body>
+
+</html>
